@@ -1,0 +1,25 @@
+[package]
+name = "hello"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
+
+[dependencies]
+tokio = { version = "1.39", features = ["macros", "rt-multi-thread"] }
+tonic = { version = "0.12", features = ["transport", "tls"] }
+prost = "0.13"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+rustls-pemfile = "2.2"
+anyhow = "1.0.100"
+
+[build-dependencies]
+tonic-build = "0.12"
+prost-build = "0.13"
+protoc-bin-vendored = "3.0"
