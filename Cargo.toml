@@ -12,12 +12,13 @@ name = "client"
 path = "src/client.rs"
 
 [dependencies]
-tokio = { version = "1.39", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.39", features = ["macros", "rt-multi-thread", "full"] }
 tonic = { version = "0.12", features = ["transport", "tls"] }
 prost = "0.13"
 rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
 rustls-pemfile = "2.2"
 anyhow = "1.0.100"
+tokio-rustls = "0.24" # Required for rustls integration
 
 [build-dependencies]
 tonic-build = "0.12"
