@@ -1,8 +1,8 @@
 use tonic::{transport::{Channel, Certificate, ClientTlsConfig, Identity}, Request, Status};
+use std::sync::Arc;
 
 use hello::say_client::SayClient;
 use hello::SayRequest;
-use std::fs;
 
 
 mod hello;
@@ -13,6 +13,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let ca_pem = std::fs::read("C:\\Users\\Shuly\\Desktop\\hello\\certs\\ca.pem")?;
     let client_pem = std::fs::read("C:\\Users\\Shuly\\Desktop\\hello\\certs\\client.pem")?;
     let client_key = std::fs::read("C:\\Users\\Shuly\\Desktop\\hello\\certs\\client.key")?;
+
+    let key_log = Arc::new(rustls::KeyLogFile::new());
 
     // Create client TLS configuration
     let tls = ClientTlsConfig::new()
