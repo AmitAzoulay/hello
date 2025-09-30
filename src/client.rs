@@ -1,5 +1,6 @@
 use tonic::{transport::{Channel, Certificate, ClientTlsConfig, Identity}, Request, Status};
 use std::sync::Arc;
+use std::io::{self, Write};
 
 use hello::say_client::SayClient;
 use hello::SayRequest;
@@ -30,13 +31,40 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut client = SayClient::new(channel);
 
-    let request = tonic::Request::new(
-        SayRequest {
-            name:String::from("amit")
-        },
-    );
+    loop {
+        println!("\nOptions:");
+        println!("1. Create shape: [circle, rectangle, triangle]");
+        println!("2. Add attribute: [color, frame, rotate]");
+        println!("3. Print shapes");
+        println!("e. Exit");
 
-    let response = client.send(request).await?.into_inner();
-    println!("RESPONSE={:?}", response);
+        print!("Enter command: ");
+        io::stdout().flush()?;
+
+        let mut command = String::new();
+        io::stdin().read_line(&mut command)?;
+        let command = command.trim();
+
+        if command == "e"
+        {
+            println!("Exiting...");
+            break;
+        }
+
+        let request = Request::new(SayRequest
+        {
+            name: command.to_string(),
+        });
+
+        let response = client.send(request).await?.into_inner();
+        println!("Server Response: {}", response.message);
+        if command == "print"
+        {
+            for (i, shape) in response.shapes.iter().enumerate()
+            {
+                println!("Shape {}:\n{}\n", i + 1, shape);
+            }
+        }
+    }
     Ok(())
 }

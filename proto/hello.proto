@@ -16,4 +16,6 @@ message SayRequest
 message SayResponse
 {
   string message = 1;
+  repeated string shapes = 2;
+  repeated string types = 3;
 }
